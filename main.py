@@ -16,7 +16,7 @@ class Main(Frame):
             "1", "2", "3", "/",
             "4", "5", "6", "+",
             "7", "8", "9", "-",
-            "(", "0", ")", "X^2", "ax^2+bx+c", "ax^4+bx^2+c", "СС"
+            "(", "0", ")", "X^2", "ax^2+bx+c", "ax^4+bx^2+c", "СС", "."
         ]
 
         x = 10
@@ -41,9 +41,9 @@ class Main(Frame):
         elif operation == "DEL":
             self.formula = self.formula[0:-1]
         elif operation == "X^2":
-            self.formula = str((eval(self.formula))**2)
+            self.formula += "^2"
         elif operation == "=":
-            self.formula = str(eval(self.formula))
+            self.formula = str(eval(self.formula.replace("^2", "**2")))
         elif operation == "ax^2+bx+c":
             from math import sqrt
             def solver(a, b, c):
