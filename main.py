@@ -185,7 +185,7 @@ class Main(Frame):
                 if self.formula == "0":
                     self.formula = ""
                 self.formula += operation
-                self.update()
+        self.update()
 
     def update(self):
         if self.formula == "":
