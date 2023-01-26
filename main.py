@@ -1,3 +1,4 @@
+import webbrowser
 from tkinter import *
 from calculators import *
 
@@ -6,33 +7,46 @@ class Main(Frame):
     def __init__(self, root):
         super(Main, self).__init__(root)
         self.formula = "0"
-        self.lbl = Label(text=self.formula, font=("Times New Roman", 21, "bold"), bg="#000", foreground="#FFF")
         self.build()
 
+    def link(self):
+        webbrowser.open_new(r"http://academy21.ru/")
+
     def build(self):
+        photo = PhotoImage(file = r"bg_logo.png")
+        photoimage = photo.subsample(1, 1)
+        Button(root, image=photoimage,
+               compound=LEFT, command=self.link).place(x=361, y=545,
+                                          width=114,
+                                          height=159)
+
+        self.lbl = Label(text=self.formula, font=("Times New Roman", 21, "bold"), bg="#000", foreground="#FFF")
         self.lbl.place(x=11, y=50)
 
         btns = [
-            "C", "DEL", "*", "=",
-            "1", "2", "3", "/",
-            "4", "5", "6", "+",
-            "7", "8", "9", "-",
-            "(", "0", ")", "X^2", "ax^2+bx+c", "ax^4+bx^2+c", "СС", "."
+            ["C", "DEL", "*", "="],
+            ["1", "2", "3", "/"],
+            ["4", "5", "6", "+"],
+            ["7", "8", "9", "-"],
+            ["(", "0", ")", "."],
+            ["X^2", "√", "X^3"],
+            ["ax^2+bx+c", "ax^4+bx^2+c", "СС"]
         ]
 
-        x = 10
         y = 140
-        for bt in btns:
-            com = lambda x=bt: self.logicalc(x)
-            Button(text=bt, bg="#FFF",
-                   font=("Times New Roman", 15),
-                   command=com).place(x=x, y=y,
-                                      width=115,
-                                      height=79)
-            x += 117
-            if x > 400:
-                x = 10
-                y += 81
+        for bt_line in btns:
+            x = 10
+            for bt in bt_line:
+                com = lambda x=bt: self.logicalc(x)
+                Button(text=bt, bg="#FFF",
+                       font=("Times New Roman", 15),
+                       command=com).place(x=x, y=y,
+                                          width=115,
+                                          height=79)
+                x += 117
+            y += 81
+        root.mainloop()
+
 
     def inserter(self, value, output):
         """ Вставляет указанное значение в текстовый виджет """
@@ -52,8 +66,12 @@ class Main(Frame):
                 self.formula = self.formula[0:-1]
             case "X^2":
                 self.formula += "^2"
+            case "X^3":
+                self.formula += "^3"
+            case "√":
+                self.formula += "^0.5"
             case "=":
-                self.formula = str(eval(self.formula.replace("^2", "**2")))
+                self.formula = str(eval(self.formula.replace("^", "**")))
             case "ax^2+bx+c":
                 def handler():
                     """ Получает содержимое записей и передает результат в текст """
@@ -196,7 +214,7 @@ class Main(Frame):
 if __name__ == '__main__':
     root = Tk()
     root["bg"] = "#000"
-    root.geometry("485x650+200+200")
+    root.geometry("485x715+200+200")
     root.title("Калькулятор")
     root.resizable(False, False)
     app = Main(root)
