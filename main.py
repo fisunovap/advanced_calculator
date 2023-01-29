@@ -1,7 +1,7 @@
 import webbrowser
 from tkinter import *
 from calculators import *
-
+from number_systems import NumberSystem
 
 class Main(Frame):
     def __init__(self, root):
@@ -62,16 +62,22 @@ class Main(Frame):
         match operation:
             case "C":
                 self.formula = ""
+                self.update()
             case "DEL":
                 self.formula = self.formula[0:-1]
+                self.update()
             case "X^2":
                 self.formula += "^2"
+                self.update()
             case "X^3":
                 self.formula += "^3"
+                self.update()
             case "√":
                 self.formula += "^0.5"
+                self.update()
             case "=":
                 self.formula = str(eval(self.formula.replace("^", "**")))
+                self.update()
             case "ax^2+bx+c":
                 def handler():
                     """ Получает содержимое записей и передает результат в текст """
@@ -156,54 +162,13 @@ class Main(Frame):
 
                 root.mainloop()
             case "СС":
-                def handler():
-                    """ Получает содержимое записей и передает результат в текст """
-                    try:
-                        # проверка, что мы ввели правильные значения
-                        a_val = str(a.get())
-                        s_val = int(b.get())
-                        f_val = int(c.get())
-                        result = to_new_system(a_val, s_val, f_val)
-                        self.inserter(result, output)
-                    except ValueError:
-                        self.inserter("Убедитесь, что введены верные значения", output)
-
-
-                root = Tk()
-                root.title("СС")
-                root.minsize(450, 100)
-                root.resizable(width=False, height=False)
-
-                frame = Frame(root)
-                frame.grid()
-
-                a = Entry(frame, width=20)
-                a.grid(row=1, column=1, padx=(10, 0))
-                a.bind("<FocusIn>", self.clear)
-                Label(frame, text="Число").grid(row=1, column=2)
-
-                b = Entry(frame, width=3)
-                b.bind("<FocusIn>", self.clear)
-                b.grid(row=1, column=3)
-                Label(frame, text="Исходная СС").grid(row=1, column=4)
-
-                c = Entry(frame, width=3)
-                c.bind("<FocusIn>", self.clear)
-                c.grid(row=1, column=5)
-                Label(frame, text="Конечная СС").grid(row=1, column=6)
-
-                Button(frame, text="Решить", command=handler).grid(row=1, column=7, padx=(10, 0))
-
-                output = Text(frame, bg="black", font="Arial 12", fg="white", width=50, height=10)
-                output.grid(row=2, columnspan=8)
-
-                root.mainloop()
+                NumberSystem()
 
             case _:
                 if self.formula == "0":
                     self.formula = ""
                 self.formula += operation
-        self.update()
+                self.update()
 
     def update(self):
         if self.formula == "":
@@ -211,7 +176,7 @@ class Main(Frame):
         self.lbl.configure(text=self.formula)
 
 
-if __name__ == '__main__':
+try:
     root = Tk()
     root["bg"] = "#000"
     root.geometry("485x715+200+200")
@@ -220,3 +185,5 @@ if __name__ == '__main__':
     app = Main(root)
     app.pack()
     root.mainloop()
+except:
+    pass
